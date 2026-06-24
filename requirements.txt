@@ -1,0 +1,41 @@
+# ERP Video Process Miner — Bağımlılıklar
+# Kurulum: pip install -r requirements.txt
+# Not: PaddleOCR ilk çalışmada ~150MB model indirir.
+# Not: CLIP ilk çalışmada ~340MB model indirir.
+# Not: Whisper small ilk çalışmada ~244MB model indirir.
+
+# ── Video İşleme ──────────────────────────────────────────────────────────────
+scenedetect[opencv]>=0.6.1      # PySceneDetect — sahne tespiti
+opencv-python-headless>=4.9.0  # OpenCV (headless: GUI gerektirmez)
+ffmpeg-python>=0.2.0            # Video metadata (opsiyonel ama faydalı)
+
+# ── OCR ───────────────────────────────────────────────────────────────────────
+# Not: PaddleOCR 3.x API'si 2.x'ten farklı (bkz. CLAUDE.md "Kritik bulgular").
+# frame_ocr.py PaddleOCR 3.7.0 + paddlepaddle 3.3.1 ile test edildi.
+paddleocr>=3.0.0                # Ana OCR motoru
+paddlepaddle>=3.0.0             # PaddleOCR backend (CPU versiyonu)
+# GPU kullanmak için: pip install paddlepaddle-gpu
+
+# ── CLIP (Ekran Sınıflandırma) ────────────────────────────────────────────────
+transformers>=4.40.0            # HuggingFace CLIP modeli
+torch>=2.1.0                    # PyTorch (CPU)
+# torchvision>=0.16.0           # CLIP için gerekebilir
+pillow>=10.0.0                  # Image processing
+
+# ── Transkript ────────────────────────────────────────────────────────────────
+openai-whisper>=20231117        # Ses → metin (transkript yoksa)
+python-docx>=1.1.0               # Teams DOCX transkript export'unu parse etmek için
+
+# ── Veri & Çıktı ──────────────────────────────────────────────────────────────
+pandas>=2.0.0                   # CSV/DataFrame işlemleri
+numpy>=1.24.0                   # Array işlemleri
+pyyaml>=6.0                     # config.yaml okuma
+
+# ── LLM (Son Adım) ────────────────────────────────────────────────────────────
+requests>=2.31.0                # Ollama HTTP API çağrısı
+anthropic>=0.30.0               # Anthropic API (opsiyonel)
+# openai>=1.0.0                 # OpenAI API (opsiyonel)
+
+# ── Terminal UI ───────────────────────────────────────────────────────────────
+rich>=13.0.0                    # Renkli terminal çıktısı, progress bar
+click>=8.1.0                    # CLI argümanları

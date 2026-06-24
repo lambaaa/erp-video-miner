@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Project outputs & caches
+output/
+docs/
+models/
+*.mp4
+*.webm
+*.avi
+*.vtt
+*.srt
+
+# Local notes (contains PII / client-specific details)
+CLAUDE.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

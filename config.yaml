@@ -1,0 +1,78 @@
+# ERP Video Process Miner — Konfigürasyon
+# Tüm threshold'lar buraya. Kod içinde magic number yok.
+
+scene_detection:
+  threshold: 30.0         # ContentDetector hassasiyeti (↓ = daha hassas, ↑ = daha az sahne)
+  min_scene_len: 15       # Minimum sahne uzunluğu (frame sayısı, FPS'e göre ayarla)
+  keyframe_position: mid  # "start" | "mid" | "end" — sahnenin hangi frame'i alınsın
+
+ocr:
+  confidence_threshold: 0.65
+  lang: "latin"           # "latin" | "tr" — Türkçe UI için latin daha stabil
+  upscale_target_h: 1080  # Kaç piksel yüksekliğe upscale edilsin
+  use_gpu: false
+  denoise_h: 5            # fastNlMeansDenoisingColored h parametresi
+  clahe_clip: 3.0         # CLAHE clipLimit
+  unsharp_amount: 1.5     # addWeighted alpha
+  label_max_chars: 22     # Bu uzunluktan kısa metin → label adayı
+  label_value_max_dist: 500  # Label-value yatay mesafe eşiği (px)
+  y_alignment_tolerance: 30   # Label-value Y hizalama toleransı (px)
+
+clip:
+  model: "openai/clip-vit-base-patch32"  # POC için base; large daha iyi ama yavaş
+  cache_dir: "./models"
+  batch_size: 8
+  top_k: 3
+  # Bunu aşan confidence → "diğer uygulama" olarak filtrele
+  noise_screen_confidence: 0.70
+  noise_screen_types:
+    - "other_application"
+    - "loading_screen"
+
+transcript:
+  alignment_window: 3.0       # Sahne zamanı ±N saniye içindeki segmentleri al
+  min_segment_duration: 0.5   # Bu süreden kısa segmentleri birleştir
+  whisper_model: "small"      # "tiny" | "base" | "small" | "medium"
+  whisper_language: "tr"
+
+event_builder:
+  # Confidence bileşenleri (toplamı 1.0 olması gerekmiyor)
+  # REVİZE (52 sahnelik batch enrichment sonrası, bkz. CLAUDE.md "REVİZE KARARLAR"):
+  # CLIP zayıf sinyal olduğu için ağırlığı düşürüldü, OCR title yeni güçlü sinyal.
+  signal_weights:
+    screen_change: 0.20        # 0.30 -> 0.20
+    ocr_title_detected: 0.35   # yeni
+    ocr_button: 0.30           # 0.35 -> 0.30
+    transcript_action: 0.25    # 0.20 -> 0.25
+    clip_signal: 0.10          # yeni (eski screen_change'in CLIP'e dayanan kısmı)
+    form_data_change: 0.20     # değişmedi
+  # Confidence → status eşikleri
+  status_thresholds:
+    confirmed: 0.70
+    inferred:  0.40
+    uncertain: 0.00   # altı → uncertain
+  # layout_type == "list_table" sahnelerde event tipi "screen_view" olur,
+  # "button_click" değil (bkz. pipeline/models.py EnrichedScene.layout_type)
+  # Bu layout_type'ta event üretilmez:
+  skip_layout_types:
+    - "loading"
+  ocr_title_confidence_floor: 0.65
+  clip_confidence_floor: 0.55
+
+llm:
+  enabled: true
+  provider: "ollama"            # "ollama" | "anthropic" | "openai"
+  model: "qwen2.5:7b"          # ollama modeli
+  # provider: "anthropic"
+  # model: "claude-haiku-4-5-20251001"
+  ollama_url: "http://localhost:11434"
+  max_tokens: 800
+  temperature: 0.1
+  max_events_for_llm: 100      # Bu sayıyı aşarsa event'ler özetlenir
+  output_language: "tr"         # "tr" | "en"
+
+output:
+  dir: "./output"
+  keyframes_subdir: "keyframes"
+  save_intermediate: true       # Her modülün JSON çıktısını kaydet (debug)
+  csv_delimiter: ","
