@@ -1,6 +1,19 @@
 # ERP Video Process Miner
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Transformers](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-CLIP-yellow?style=for-the-badge)](https://huggingface.co/docs/transformers/model_doc/clip)
+[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
+[![PaddleOCR](https://img.shields.io/badge/PaddleOCR-0062B0?style=for-the-badge&logo=paddlepaddle&logoColor=white)](https://github.com/PaddlePaddle/PaddleOCR)
+[![Whisper](https://img.shields.io/badge/OpenAI%20Whisper-412991?style=for-the-badge&logo=openai&logoColor=white)](https://github.com/openai/whisper)
+[![Ollama](https://img.shields.io/badge/Ollama-qwen2.5-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.com/)
+[![pandas](https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://pytest.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+
 > **Automatic audit trail and process documentation from ERP training videos — without access to ERP logs.**
+
+[🇹🇷 Türkçe sürüm](README.tr.md)
 
 ---
 
@@ -235,9 +248,3 @@ This project's target scenario is different: **the recording already happened.**
 **This is a proof of concept.** It demonstrates that the approach works. It is not production software.
 
 The pipeline runs end-to-end and produces usable output. The main gap between POC and production is OCR screen name reliability, which is ERP-specific and improvable with relatively little effort.
-
----
-
-## License
-
-MIT
